@@ -1,75 +1,32 @@
 version: '3.9'
 
 services:
+
+  # SERVER
   nginx:
-    build:
-      context: .
-      dockerfile: nginx.Dockerfile
-    container_name: ${APP_NAME}_nginx
+    build: ./requirements/nginx
+    container_name: nginx
     restart: always
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./requirements/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
-      - ./requirements/nginx/conf/conf.d:/etc/nginx/conf.d
-
-  mariadb:
-    build:
-      context: .
-      dockerfile: mariadb.Dockerfile
-    container_name: ${APP_NAME}_mariadb
-    restart: always
-    ports:
-      - "3306:3306"
-    volumes:
-      - wp_data:/var/lib/mysql
+      - 80:80
+      - 443:443
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-
+      - DOMAIN=${DOMAIN}
+    networks:
+      - inception
+  
   # WORDPRESS
-
-  php:
-    build:
-      context: .
-      dockerfile: php.Dockerfile
-    container_name: ${APP_NAME}_php
-    restart: always
-
   wordpress:
-    build:
-      context: .
-      dockerfile: wordpress.Dockerfile
-    container_name: ${APP_NAME}_wordpress
+    build: ./requirements/wordpress
+    container_name: wordpress
     restart: always
     ports:
-      - "8080:80"
-    volumes:
-      - ./requirements/wordpress/conf/php.ini:/usr/local/etc/php/php.ini
-      - wordpress:/var/www/html
-    environment:
-      WORDPRESS_DB_HOST: mariadb
-      WORDPRESS_DB_USER: ${DB_USER}
-      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
-      WORDPRESS_DB_NAME: ${DB_DATABASE}
+      - 9000:9000
     depends_on:
-      - mariadb
+      - nginx
+    networks:
+      - inception
 
-    # BONUS
-    adminer:
-      build:
-        context: .
-        dockerfile: adminer.Dockerfile
-      container_name: ${APP_NAME}_adminer
-      restart: always
-      ports:
-        - "8080:8080"
-      depends_on:
-        - mariadb
-
-volumes:
-  wp_data:
-  wordpress:
+networks:
+  inception:
+    driver: bridge

@@ -71,3 +71,13 @@ srcs
         └── scripts
             └── entrypoint.sh # Wordpress installation script
 ```
+
+## Bonus
+
+```bash
+srcs
+└── requirements
+    └── adminer # Adminer image
+    	├── Dockerfile
+        └── .dockerignore
+```

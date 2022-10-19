@@ -1,32 +1,58 @@
 version: '3.9'
 
+# NETWORK
+networks:
+  42-network:
+
+# VOLUMES
+volumes:
+  wp_volume:
+  db_volume:
+
 services:
+
+  # DATABASE
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+    container_name: mariadb
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ~/data/db_volume:/var/lib/mysql
+    networks:
+      - 42-network
+
+  # WORDPRESS
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+      args:
+        DOMAIN: ${DOMAIN}
+    container_name: wordpress
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ~/data/wp_volume:/var/www/${DOMAIN}
+    depends_on:
+      - mariadb
+    networks:
+      - 42-network
 
   # SERVER
   nginx:
-    build: ./requirements/nginx
+    build:
+      context: ./requirements/nginx
+      args:
+        DOMAIN: ${DOMAIN}
     container_name: nginx
-    restart: always
+    restart: unless-stopped
+    env_file: .env
     ports:
-      - 80:80
       - 443:443
-    environment:
-      - DOMAIN=${DOMAIN}
-    networks:
-      - inception
-  
-  # WORDPRESS
-  wordpress:
-    build: ./requirements/wordpress
-    container_name: wordpress
-    restart: always
-    ports:
-      - 9000:9000
+    volumes:
+      - ~/data/wp_volume:/var/www/${DOMAIN}
     depends_on:
-      - nginx
+      - wordpress
     networks:
-      - inception
-
-networks:
-  inception:
-    driver: bridge
+      - 42-network

@@ -7,15 +7,15 @@ RESET		= \033[0m
 
 # FOLDER
 SRCS_DIR	= ./srcs/
-NGINX_DIR	= ${SRCS_DIR}requirements/nginx/
+DOCKER_DIR	= ${SRCS_DIR}docker-compose.yml
 
 # VARIABLES
 ENV_FILE	= ${SRCS_DIR}.env
-NAME		= $(shell grep APP_NAME ${ENV_FILE} | cut -d '=' -f2)
-DOMAIN		= $(shell grep DOMAIN ${ENV_FILE} | cut -d '=' -f2)
+NAME		= $(shell grep -m 1 APP_NAME ${ENV_FILE} | cut -d '=' -f2)
+DOMAIN		= $(shell grep -m 1 DOMAIN ${ENV_FILE} | cut -d '=' -f2)
 
 # COMMANDS
-DOCKER		=  docker compose -f ${SRCS_DIR}docker-compose.yml --env-file ${ENV_FILE}
+DOCKER		=  docker compose -f ${DOCKER_DIR} --env-file ${ENV_FILE} -p ${NAME}
 
 # If no rule is matched, pass the argument to the shell
 %:
@@ -27,27 +27,50 @@ all: up
 env: ## Create/Overwrite .env file
 	@bash ./srcs/requirements/tools/env-gen.sh
 
+host: ## Add domain to /etc/hosts
+	@bash ./srcs/requirements/tools/add-host.sh
+
 ##@ Docker
 ps: ## List containers
 	@echo "${CYAN}List containers${RESET}"
 	@${DOCKER} ps
 
-up: ## Start containers
-	@echo "${GREEN}Building ${NAME}...${RESET}"
-	@${DOCKER} up -d nginx
-	@${DOCKER} up -d wordpress
+network: ## List networks
+	@echo "${CYAN}List networks${RESET}"
+	@docker network ls
+
+pause: ## Pause containers
+	@echo "${ORANGE}Pausing ${NAME}...${RESET}"
+	@${DOCKER} pause
+
+unpause: ## Unpause containers
+	@echo "${ORANGE}Unpausing ${NAME}...${RESET}"
+	@${DOCKER} unpause
+
+start: ## Start containers
+	@echo "${GREEN}Starting ${NAME}...${RESET}"
+	@${DOCKER} start
 
 stop: ## Stop containers
 	@echo "${RED}Stopping ${NAME}...${RESET}"
 	@${DOCKER} stop
 
+up: ## Start containers
+	@echo "${GREEN}Starting ${NAME}...${RESET}"
+	@${DOCKER} up -d
+
+build: ## Build or rebuild services
+	@echo "${CYAN}Build or rebuild services${RESET}"
+	@${DOCKER} build
+
 down: ## Stop and remove containers
 	@echo "${GREEN}Stopping ${NAME}...${RESET}"
-	@${DOCKER} down
+	@${DOCKER} down -v --remove-orphans --rmi all
 
 clean: ## Remove all containers
 	@echo "${GREEN}Removing ${NAME}...${RESET}"
 	@docker system prune -a -f
+	@sudo rm -rf ~/data
 
 restart: ## Restart containers
 	@echo "${GREEN}Restarting ${NAME}...${RESET}"
@@ -57,11 +80,45 @@ rebuild: ## Rebuild containers
 	@echo "${GREEN}Rebuilding ${NAME}...${RESET}"
 	@${DOCKER} up --build -d
 
+fclean: clean ## Remove all containers
+	@echo "${GREEN}Removing ${NAME}...${RESET}"
+	@${DOCKER} system prune --volumes --force --all
+	@${DOCKER} network prune --force
+
+##@ Services
+nginx: ## Start nginx container
+	@echo "${GREEN}Building ${NAME}...${RESET}"
+	@${DOCKER} up -d nginx
+
+mariadb: ## Start mariadb container
+	@echo "${GREEN}Building ${NAME}...${RESET}"
+	@${DOCKER} up -d mariadb
+
+wordpress: ## Start wordpress container
+	@echo "${GREEN}Building ${NAME}...${RESET}"
+	@${DOCKER} up -d wordpress
+
+##@ Services bash
+exec-wp: ## Execute wordpress container
+	@echo "${GREEN}Executing ${NAME}...${RESET}"
+	@${DOCKER} exec wordpress bash
+
+exec-db: ## Execute mariadb container
+	@echo "${GREEN}Executing ${NAME}...${RESET}"
+	@${DOCKER} exec mariadb bash
+
+exec-srv: ## Execute nginx container
+	@echo "${GREEN}Executing ${NAME}...${RESET}"
+	@${DOCKER} exec nginx bash
+
 ##@ Help
 info: ## Display containers running urls
+	@echo "${GREEN}Containers running urls${RESET}"
+	@echo "Website: https://${DOMAIN}"
+	@echo "Admin panel: https://${DOMAIN}/wp-admin"
 
 help:
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage: make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 ##@
-.PHONY: all env ps up down clean restart rebuild info help
+.PHONY: all env host ps pause unpause start stop up build down clean restart rebuild fclean nginx mariadb wordpress exec-wp exec-db exec-srv info help

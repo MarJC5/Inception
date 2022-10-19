@@ -75,9 +75,25 @@ srcs
 ## Bonus
 
 ```bash
-srcs
-└── requirements
-    └── adminer # Adminer image
-    	├── Dockerfile
-        └── .dockerignore
+srcs/requirements/bonus
+├── adminer # Adminer image
+│  ├── Dockerfile
+│  └── .dockerignore
+└── website # Static Website image
+    ├── app
+    │  ├── data
+    │  │   └── data.json # Data file
+    │  ├── images # Static images
+    │  ├── index.html # HTML file for the website
+    │  ├── js
+    │  │  └── render.js # Render the data file into the HTML page
+    │  ├── package.json # npm package file
+    │  ├── package-lock.json
+    │  ├── server.js # NodeJS server to serve the website on port 3000
+    │  ├── stylesheets
+    │  │   ├── compiled.css # Compiled CSS file from tailwindcss regarding the class used in the HTML page
+    │  │   └── style.css # Default tailwindcss stylesheet
+    │  └── tailwind.config.js # Tailwindcss configuration file
+    ├── Dockerfile
+    └── .dockerignore
 ```

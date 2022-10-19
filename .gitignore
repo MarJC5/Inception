@@ -24,3 +24,4 @@ vendor/pkg/
 pyenv
 Vagrantfile
 .env
+./srcs/requirements/website/app/node_modules

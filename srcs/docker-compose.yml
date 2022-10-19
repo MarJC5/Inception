@@ -69,3 +69,13 @@ services:
       - nginx
     networks:
       - 42-network
+  # ADMINER
+  website:
+    build:
+      context: ./requirements/website
+    container_name: website
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - 42-network

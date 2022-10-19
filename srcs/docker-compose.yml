@@ -49,10 +49,23 @@ services:
     restart: unless-stopped
     env_file: .env
     ports:
-      - 443:443
+      - "443:443"
     volumes:
       - ~/data/wp_volume:/var/www/${DOMAIN}
     depends_on:
       - wordpress
+    networks:
+      - 42-network
+
+  # ADMINER
+  adminer:
+    build:
+      context: ./requirements/adminer
+    container_name: adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - nginx
     networks:
       - 42-network

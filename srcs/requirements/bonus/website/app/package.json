@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "style": "npx tailwindcss build ./stylesheets/style.css -o ./stylesheets/compiled.css"
+    "style": "npx tailwindcss build stylesheets/style.css -o ./stylesheets/compiled.css"
   },
   "dependencies": {
     "autoprefixer": "^10.4.12",

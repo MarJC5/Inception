@@ -60,7 +60,7 @@ services:
   # ADMINER
   adminer:
     build:
-      context: ./requirements/adminer
+      context: requirements/bonus/adminer
     container_name: adminer
     restart: unless-stopped
     ports:
@@ -72,7 +72,7 @@ services:
   # ADMINER
   website:
     build:
-      context: ./requirements/website
+      context: requirements/bonus/website
     container_name: website
     restart: unless-stopped
     ports:

@@ -49,7 +49,7 @@ srcs
     ├── mariadb # MariaDB image
     │	├── conf
     │	│	├── create_db.sql # SQL script to create the database
-	│	│	└── mariadb-server.cnf # MariaDB configuration file
+    │	│	└── mariadb-server.cnf # MariaDB configuration file
     │	├── Dockerfile
     │	├── .dockerignore
     │	└── scripts

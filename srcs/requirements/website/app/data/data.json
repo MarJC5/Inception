@@ -1,0 +1,131 @@
+[
+  {
+    "id": "1",
+    "name": "Libft",
+    "topics": [
+      "Makefile",
+      "Library",
+      "Functions"
+    ],
+    "technology": "c",
+    "grade": "100",
+    "url": "https://github.com/MarJC5/Libft"
+  },
+    {
+        "id": "2",
+        "name": "Get Next Line",
+        "topics": [
+        "File",
+        "Buffer",
+        "Functions"
+        ],
+        "technology": "c",
+        "grade": "125",
+        "url": "https://github.com/MarJC5/get_next_line"
+    },
+  {
+    "id": "3",
+    "name": "ft_printf",
+    "topics": [
+      "Library",
+      "Functions",
+      "Format"
+    ],
+    "technology": "c",
+    "grade": "100",
+    "url": "https://github.com/MarJC5/ft_printf"
+  },
+  {
+    "id": "4",
+    "name": "Born2beroot",
+    "topics": [
+      "Virtual Machine",
+      "Security"
+    ],
+    "technology": "c",
+    "grade": "125",
+    "url": "https://github.com/MarJC5/born2beroot"
+  },
+  {
+    "id": "5",
+    "name": "so_long",
+    "topics": [
+      "Game",
+      "Graphics",
+      "Algorithm"
+    ],
+    "technology": "c",
+    "grade": "125",
+    "url": "https://github.com/MarJC5/so_long"
+  },
+  {
+    "id": "6",
+    "name": "minitalk",
+    "topics": [
+      "Signal",
+      "Communication"
+    ],
+    "technology": "c",
+    "grade": "115",
+    "url": "https://github.com/MarJC5/minitalk"
+  },
+  {
+    "id": "7",
+    "name": "push_swap",
+    "topics": [
+      "Algorithm",
+      "Sorting"
+    ],
+    "technology": "c",
+    "grade": "84",
+    "url": "https://github.com/MarJC5/push_swap"
+  },
+  {
+    "id": "8",
+    "name": "Philosophers",
+    "topics": [
+      "Algorithm",
+      "Concurrency",
+      "Threads"
+    ],
+    "technology": "c",
+    "grade": "100",
+    "url": "https://github.com/MarJC5/philosophers"
+  },
+  {
+    "id": "9",
+    "name": "minishell",
+    "topics": [
+      "Shell",
+      "Command Line",
+      "Parser"
+    ],
+    "technology": "c",
+    "grade": "97",
+    "url": "https://github.com/MarJC5/minishell"
+  },
+  {
+    "id": "10",
+    "name": "cub3d",
+    "topics": [
+      "Game",
+      "Graphics",
+      "Algorithm"
+    ],
+    "technology": "c",
+    "grade": "115",
+    "url": "https://github.com/MarJC5/cub3d"
+  },
+  {
+    "id": "11",
+    "name": "NetPractice",
+    "topics": [
+      "Network",
+      "Protocol",
+      "Socket"
+    ],
+    "technology": "c",
+    "grade": "100",
+    "url": "https://github.com/MarJC5/NetPractice"
+  }
+]

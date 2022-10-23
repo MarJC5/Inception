@@ -79,6 +79,11 @@ srcs/requirements/bonus
 ├── adminer # Adminer image
 │  ├── Dockerfile
 │  └── .dockerignore
+├── backup
+│  ├── Dockerfile
+│  ├── .dockerignore
+│  └── scripts
+│     └── backup.sh # Backup script
 └── website # Static Website image
     ├── app
     │  ├── data

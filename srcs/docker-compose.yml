@@ -8,6 +8,7 @@ networks:
 volumes:
   wp_volume:
   db_volume:
+  backup_volume:
 
 services:
 
@@ -57,6 +58,10 @@ services:
     networks:
       - 42-network
 
+  ##############################
+  #          BONUS :^)         #
+  ##############################
+
   # ADMINER
   adminer:
     build:
@@ -69,7 +74,8 @@ services:
       - nginx
     networks:
       - 42-network
-  # ADMINER
+
+  # STATIC WEBSITE
   website:
     build:
       context: requirements/bonus/website
@@ -77,5 +83,19 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
+    networks:
+      - 42-network
+
+  # WORDPRESS BACKUP
+  backup:
+    build:
+      context: requirements/bonus/backup
+    container_name: backup
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ~/data/backup_volume:/backup
+    depends_on:
+      - nginx
     networks:
       - 42-network

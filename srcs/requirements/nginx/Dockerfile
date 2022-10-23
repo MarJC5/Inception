@@ -1,6 +1,6 @@
 FROM alpine:3.14
 
-LABEL maintainer="Martin Jean-Christio <jmartin@42lausanne.ch>"
+LABEL maintainer="Martin Jean-Christio <jmartin@student.42lausanne.ch>"
 
 ARG DOMAIN
 

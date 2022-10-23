@@ -1,6 +1,6 @@
 FROM alpine:3.14
 
-LABEL maintainer="Martin Jean-Christio <jmartin@42lausanne.ch>"
+LABEL maintainer="Martin Jean-Christio <jmartin@student.42lausanne.ch>"
 
 ARG DOMAIN
 ARG DIR=/var/www/${DOMAIN}
@@ -25,7 +25,7 @@ COPY conf/php.conf.ini /usr/local/etc/php/conf.d/conf.ini
 # Copy phpinfo.php
 COPY conf/phpinfo.php /conf/phpinfo.php
 
-# On copie le scripts entrypoint
+# Copy entrypoint.sh script
 COPY ./scripts/entrypoint.sh /tmp/entrypoint.sh
 RUN chmod +x /tmp/entrypoint.sh
 

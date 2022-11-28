@@ -69,7 +69,7 @@ down: ## Stop and remove containers
 
 clean: ## Remove all containers
 	@echo "${GREEN}Removing ${NAME}...${RESET}"
-	@docker system prune -a -f
+	@${DOCKER} rm -f
 	@sudo rm -rf ~/data
 
 restart: ## Restart containers
@@ -82,8 +82,7 @@ rebuild: ## Rebuild containers
 
 fclean: clean ## Remove all containers
 	@echo "${GREEN}Removing ${NAME}...${RESET}"
-	@${DOCKER} system prune --volumes --force --all
-	@${DOCKER} network prune --force
+	@${DOCKER} down -v --remove-orphans --rmi all
 
 ##@ Services
 nginx: ## Start nginx container
@@ -101,15 +100,15 @@ wordpress: ## Start wordpress container
 ##@ Services bash
 exec-wp: ## Execute wordpress container
 	@echo "${GREEN}Executing ${NAME}...${RESET}"
-	@${DOCKER} exec wordpress bash
+	@${DOCKER} exec wordpress sh
 
 exec-db: ## Execute mariadb container
 	@echo "${GREEN}Executing ${NAME}...${RESET}"
-	@${DOCKER} exec mariadb bash
+	@${DOCKER} exec mariadb sh
 
 exec-srv: ## Execute nginx container
 	@echo "${GREEN}Executing ${NAME}...${RESET}"
-	@${DOCKER} exec nginx bash
+	@${DOCKER} exec nginx sh
 
 ##@ Help
 info: ## Display containers running urls

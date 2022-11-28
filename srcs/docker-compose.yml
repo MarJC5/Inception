@@ -7,8 +7,23 @@ networks:
 # VOLUMES
 volumes:
   wp_volume:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "/home/${LOGIN}/data/wordpress"
   db_volume:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "/home/${LOGIN}/data/mariadb"
   backup_volume:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "/home/${LOGIN}/data/backup"
 
 services:
 
@@ -17,10 +32,10 @@ services:
     build:
       context: ./requirements/mariadb
     container_name: mariadb
-    restart: unless-stopped
+    restart: always
     env_file: .env
     volumes:
-      - ~/data/db_volume:/var/lib/mysql
+      - db_volume:/var/lib/mysql
     networks:
       - 42-network
 
@@ -31,10 +46,10 @@ services:
       args:
         DOMAIN: ${DOMAIN}
     container_name: wordpress
-    restart: unless-stopped
+    restart: always
     env_file: .env
     volumes:
-      - ~/data/wp_volume:/var/www/${DOMAIN}
+      - wp_volume:/var/www/${DOMAIN}
     depends_on:
       - mariadb
     networks:
@@ -47,12 +62,12 @@ services:
       args:
         DOMAIN: ${DOMAIN}
     container_name: nginx
-    restart: unless-stopped
+    restart: always
     env_file: .env
     ports:
       - "443:443"
     volumes:
-      - ~/data/wp_volume:/var/www/${DOMAIN}
+      - wp_volume:/var/www/${DOMAIN}
     depends_on:
       - wordpress
     networks:
@@ -67,7 +82,7 @@ services:
     build:
       context: requirements/bonus/adminer
     container_name: adminer
-    restart: unless-stopped
+    restart: always
     ports:
       - "8080:8080"
     depends_on:
@@ -80,7 +95,7 @@ services:
     build:
       context: requirements/bonus/website
     container_name: website
-    restart: unless-stopped
+    restart: always
     ports:
       - "3000:3000"
     networks:
@@ -91,10 +106,10 @@ services:
     build:
       context: requirements/bonus/backup
     container_name: backup
-    restart: unless-stopped
+    restart: always
     env_file: .env
     volumes:
-      - ~/data/backup_volume:/backup
+      - backup_volume:/backup
     depends_on:
       - nginx
     networks:

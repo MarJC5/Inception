@@ -84,6 +84,9 @@ fclean: clean ## Remove all containers
 	@echo "${GREEN}Removing ${NAME}...${RESET}"
 	@${DOCKER} down -v --remove-orphans --rmi all
 
+prune: ## Prune all
+	@docker system prune -af
+
 ##@ Services
 nginx: ## Start nginx container
 	@echo "${GREEN}Building ${NAME}...${RESET}"
